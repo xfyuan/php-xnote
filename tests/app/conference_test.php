@@ -110,9 +110,9 @@ EOF;
     $this->obj->grouped_talks();
     $this->assertEquals($grouped_talks, $this->obj->grouped_talks);
 
-    // $this->obj->schedule_tracks_with_talks();
-    // $this->assertCount(8, $this->obj->scheduled_tracks[0]->talks);
-    // $this->assertCount(11, $this->obj->scheduled_tracks[1]->talks);
+    $this->obj->schedule_tracks_with_talks();
+    $this->assertCount(8, $this->obj->scheduled_tracks[0]->talks);
+    $this->assertCount(11, $this->obj->scheduled_tracks[1]->talks);
   }
 
 }

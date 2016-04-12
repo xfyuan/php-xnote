@@ -2,10 +2,12 @@
 namespace App;
 
 class Talk {
-  const LIGHTING_LENGTH = 5;
-  const TIME_UNIT       = 'min';
-  const NORMAL_TAG      = 'normal';
-  const LIGHTING_TAG    = 'lightning';
+  const LIGHTNING_LENGTH = 5;
+  const LUNCH_LENGTH     = 60;
+  const TIME_UNIT        = 'min';
+  const NORMAL_TAG       = 'normal';
+  const LIGHTNING_TAG    = 'lightning';
+  const DEFAULT_TAG      = 'default';
 
   public $title;
   public $length;
@@ -14,25 +16,37 @@ class Talk {
   public $marked = false;
 
   public function __construct($input) {
-    if($result = $this->parse($input)){
-      $this->title     = $result[1];
-      $this->length    = count($result) > 3 ? (int)$result[3] : self::LIGHTING_LENGTH;
-      $this->tag       = preg_match("/\d+/", $result[2]) ? self::NORMAL_TAG: self::LIGHTING_TAG;
+    if (strtolower($input) === 'lunch' || strtolower($input) === 'networking event') {
+      $this->title  = strtolower($input);
+      $this->length = self::LUNCH_LENGTH;
+      $this->tag    = self::DEFAULT_TAG;
+
+    } elseif ($result = $this->parse($input)){
+      $this->title  = $result[1];
+      $this->length = count($result) > 3 ? (int)$result[3] : self::LIGHTNING_LENGTH;
+      $this->tag    = preg_match("/\d+/", $result[2]) ? self::NORMAL_TAG : self::LIGHTNING_TAG;
     }
   }
 
   public function parse($input) {
-    $regex = "/(.*)\s((\d+)\s*". self::TIME_UNIT ."|". self::LIGHTING_TAG .")$/ui";
+    $regex = "/(.*)\s((\d+)\s*". self::TIME_UNIT ."|". self::LIGHTNING_TAG .")$/ui";
     preg_match($regex, $input, $matches);
     return $matches;
   }
 
-  public function print() {
-    $string = $this->tag === self::NORMAL_TAG ? "{$this->length}{$this->times}" : "{$this->tag}";
-    return "{$this->title} {$string}";
+  public function output() {
+    switch ($this->tag) {
+      case self::NORMAL_TAG:
+        $string = "{$this->title} {$this->length}{$this->times}";
+        break;
+      case self::LIGHTNING_TAG:
+        $string = "{$this->title} {$this->tag}";
+        break;
+      default:
+        $string = ucwords($this->title);
+        break;
+    }
+    return $string;
   }
 
-  public function toggle_marked() {
-    $this->marked = !$this->marked;
-  }
 }

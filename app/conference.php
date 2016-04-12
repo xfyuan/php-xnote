@@ -12,12 +12,10 @@ class Conference {
     $this->read_source($data);
     $this->refresh_days();
     $this->refresh_tracks();
-    // $this->sort_talks();
-    // $this->grouped_talks();
   }
 
   public function read_source($data) {
-    if($talks = preg_split("/\n/", $data)) {
+    if($talks = preg_split("/".PHP_EOL."/", $data)) {
       foreach($talks as $talk) {
         $this->talks[] = new Talk($talk);
       }
@@ -36,12 +34,6 @@ class Conference {
       $this->tracks[] = new Track();
     }
   }
-
-  // public function sort_talks() {
-  //   usort($this->talks, function($a, $b) {
-  //     return $b->length - $a->length;
-  //   });
-  // }
 
   public function grouped_talks() {
     foreach($this->talks as $talk) {
@@ -67,9 +59,18 @@ class Conference {
           }
         }
       }
-
       $track->plan_talks();
       $this->scheduled_tracks[] = $track;
+    }
+  }
+
+  public function output_scheduled_tracks() {
+    foreach($this->scheduled_tracks as $i => $track) {
+      echo "Track" . ($i+1) . PHP_EOL;
+      foreach($track->planned_talks as $marked_time => $talk) {
+        echo "{$marked_time} {$talk->output()}" . PHP_EOL;
+      }
+      echo PHP_EOL . PHP_EOL;
     }
   }
 

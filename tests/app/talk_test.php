@@ -49,18 +49,11 @@ class TalkTest extends PHPUnit_Framework_TestCase {
     $this->assertContains('lightning', $result);
   }
 
-  public function testToggleMarked() {
-    $this->obj->toggle_marked();
-    $this->assertTrue($this->obj->marked);
-    $this->obj->toggle_marked();
-    $this->assertFalse($this->obj->marked);
-  }
-
-  public function testPrint() {
-    $this->assertEquals('Common Ruby Errors 45min', $this->obj->print());
+  public function testOutput() {
+    $this->assertEquals('Common Ruby Errors 45min', $this->obj->output());
 
     $this->assign_lightning_talk();
-    $this->assertEquals('Common Ruby Errors lightning', $this->obj->print());
+    $this->assertEquals('Common Ruby Errors lightning', $this->obj->output());
   }
 
 }

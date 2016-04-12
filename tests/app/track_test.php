@@ -51,7 +51,8 @@ class TrackTest extends PHPUnit_Framework_TestCase {
       '10:45AM',
       '11:15AM',
       '12:00PM',
-      '01:00PM'
+      '01:00PM',
+      '02:00PM'
     ], array_keys($this->obj->planned_talks));
   }
 }
