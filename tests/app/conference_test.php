@@ -1,0 +1,118 @@
+<?php
+
+class ConferenceTest extends PHPUnit_Framework_TestCase {
+  protected $obj = null;
+  protected $talks = [];
+
+  protected function setUp() {
+    $talks = [
+      'Writing Fast Tests Against Enterprise Rails 60min',
+      'Overdoing it in Python 45min',
+      'Lua for the Masses 30min',
+      'Ruby Errors from Mismatched Gem Versions 45min',
+      'Common Ruby Errors 45min',
+      'Rails for Python Developers lightning',
+      'Communicating Over Distance 60min',
+      'Accounting-Driven Development 45min',
+      'Woah 30min',
+      'Sit Down and Write 30min',
+      'Pair Programming vs Noise 45min',
+      'Rails Magic 60min',
+      'Ruby on Rails: Why We Should Move On 60min',
+      'Clojure Ate Scala (on my project) 45min',
+      'Programming in the Boondocks of Seattle 30min',
+      'Ruby vs. Clojure for Back-End Development 30min',
+      'Ruby on Rails Legacy App Maintenance 60min',
+      'A World Without HackerNews 30min',
+      'User Interface CSS in Rails Apps 30min',
+    ];
+
+    $data = <<<EOF
+$talks[0]
+$talks[1]
+$talks[2]
+$talks[3]
+$talks[4]
+$talks[5]
+$talks[6]
+$talks[7]
+$talks[8]
+$talks[9]
+$talks[10]
+$talks[11]
+$talks[12]
+$talks[13]
+$talks[14]
+$talks[15]
+$talks[16]
+$talks[17]
+$talks[18]
+EOF;
+
+    $this->obj = new App\Conference($data);
+
+    foreach($talks as $talk) {
+      $this->talks[] = new App\Talk($talk);
+    }
+  }
+
+  public function testHaveAttributes() {
+    $klass = get_class($this->obj);
+    $this->assertClassHasAttribute('days', $klass);
+    $this->assertClassHasAttribute('talks', $klass);
+    $this->assertClassHasAttribute('grouped_talks', $klass);
+    $this->assertClassHasAttribute('tracks', $klass);
+    $this->assertClassHasAttribute('scheduled_tracks', $klass);
+  }
+
+  public function testInitial() {
+    $this->assertCount(19, $this->obj->talks);
+    $this->assertInstanceOf('App\Talk', $this->obj->talks[0]);
+
+    $this->assertEquals(2, $this->obj->days);
+
+    $this->assertCount(2, $this->obj->tracks);
+    $this->assertInstanceOf('App\Track', $this->obj->tracks[0]);
+  }
+
+  public function testGroupedTalks() {
+    $grouped_talks = [
+      '60' => [
+        $this->talks[0],
+        $this->talks[6],
+        $this->talks[11],
+        $this->talks[12],
+        $this->talks[16]
+      ],
+
+      '45' => [
+        $this->talks[1],
+        $this->talks[3],
+        $this->talks[4],
+        $this->talks[7],
+        $this->talks[10],
+        $this->talks[13]
+      ],
+
+      '30' => [
+        $this->talks[2],
+        $this->talks[8],
+        $this->talks[9],
+        $this->talks[14],
+        $this->talks[15],
+        $this->talks[17],
+        $this->talks[18]
+      ],
+
+      '5'  => [$this->talks[5]]
+    ];
+
+    $this->obj->grouped_talks();
+    $this->assertEquals($grouped_talks, $this->obj->grouped_talks);
+
+    // $this->obj->schedule_tracks_with_talks();
+    // $this->assertCount(8, $this->obj->scheduled_tracks[0]->talks);
+    // $this->assertCount(11, $this->obj->scheduled_tracks[1]->talks);
+  }
+
+}
