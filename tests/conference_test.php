@@ -1,6 +1,9 @@
 <?php
+namespace App\Tests;
+use App\Conference;
+use App\Talk;
 
-class ConferenceTest extends PHPUnit_Framework_TestCase {
+class ConferenceTest extends \PHPUnit_Framework_TestCase {
   protected $obj = null;
   protected $talks = [];
 
@@ -49,10 +52,10 @@ $talks[17]
 $talks[18]
 EOF;
 
-    $this->obj = new App\Conference($data);
+    $this->obj = new Conference($data);
 
     foreach($talks as $talk) {
-      $this->talks[] = new App\Talk($talk);
+      $this->talks[] = new Talk($talk);
     }
   }
 
@@ -107,10 +110,10 @@ EOF;
       '5'  => [$this->talks[5]]
     ];
 
-    $this->obj->grouped_talks();
+    $this->obj->groupedTalks();
     $this->assertEquals($grouped_talks, $this->obj->grouped_talks);
 
-    $this->obj->schedule_tracks_with_talks();
+    $this->obj->scheduleTracksWithTalks();
     $this->assertCount(8, $this->obj->scheduled_tracks[0]->talks);
     $this->assertCount(11, $this->obj->scheduled_tracks[1]->talks);
   }

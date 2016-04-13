@@ -9,12 +9,12 @@ class Conference {
   public $scheduled_tracks = [];
 
   public function __construct($data) {
-    $this->read_source($data);
-    $this->refresh_days();
-    $this->refresh_tracks();
+    $this->readSource($data);
+    $this->refreshDays();
+    $this->refreshTracks();
   }
 
-  public function read_source($data) {
+  public function readSource($data) {
     if($talks = preg_split("/".PHP_EOL."/", $data)) {
       foreach($talks as $talk) {
         $this->talks[] = new Talk($talk);
@@ -22,27 +22,27 @@ class Conference {
     }
   }
 
-  public function refresh_days() {
+  public function refreshDays() {
     $minutes = array_reduce($this->talks, function($memo, $talk){
       return $memo += $talk->length;
     });
     $this->days = (int) ceil($minutes / (new Track())->total_length);
   }
 
-  public function refresh_tracks() {
+  public function refreshTracks() {
     for ($i=0; $i < $this->days; $i++) {
       $this->tracks[] = new Track();
     }
   }
 
-  public function grouped_talks() {
+  public function groupedTalks() {
     foreach($this->talks as $talk) {
       $this->grouped_talks[$talk->length][] = $talk;
     }
     krsort($this->grouped_talks, SORT_NUMERIC);
   }
 
-  public function schedule_tracks_with_talks() {
+  public function scheduleTracksWithTalks() {
     foreach($this->tracks as $track) {
       $total_track_length = $track->total_length;
 
@@ -59,12 +59,12 @@ class Conference {
           }
         }
       }
-      $track->plan_talks();
+      $track->planTalks();
       $this->scheduled_tracks[] = $track;
     }
   }
 
-  public function output_scheduled_tracks() {
+  public function outputScheduledTracks() {
     foreach($this->scheduled_tracks as $i => $track) {
       echo "Track" . ($i+1) . PHP_EOL;
       foreach($track->planned_talks as $marked_time => $talk) {

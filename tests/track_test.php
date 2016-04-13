@@ -1,6 +1,9 @@
 <?php
+namespace App\Tests;
+use App\Track;
+use App\Talk;
 
-class TrackTest extends PHPUnit_Framework_TestCase {
+class TrackTest extends \PHPUnit_Framework_TestCase {
   protected $obj = null;
   protected $talks = [];
 
@@ -13,10 +16,10 @@ class TrackTest extends PHPUnit_Framework_TestCase {
       'Ruby on Rails: Why We Should Move On 60min'
     ];
 
-    $this->obj = new App\Track();
+    $this->obj = new Track();
 
     foreach($talks as $talk) {
-      $this->talks[] = new App\Talk($talk);
+      $this->talks[] = new Talk($talk);
     }
   }
 
@@ -26,7 +29,6 @@ class TrackTest extends PHPUnit_Framework_TestCase {
     $this->assertClassHasAttribute('planned_talks', $klass);
     $this->assertClassHasAttribute('starttime', $klass);
     $this->assertClassHasAttribute('endtime', $klass);
-    $this->assertClassHasAttribute('halfday', $klass);
     $this->assertClassHasAttribute('total_length', $klass);
   }
 
@@ -34,9 +36,9 @@ class TrackTest extends PHPUnit_Framework_TestCase {
     $this->obj->starttime = '09:00';
     $this->obj->endtime = '11:30';
 
-    $this->obj->total_length = $this->obj->total_diff_length(
-      $this->obj->track_datetime($this->obj->starttime),
-      $this->obj->track_datetime($this->obj->endtime)
+    $this->obj->total_length = $this->obj->totalDiffLength(
+      $this->obj->trackDatetime($this->obj->starttime),
+      $this->obj->trackDatetime($this->obj->endtime)
     );
     $this->assertEquals(150, $this->obj->total_length);
   }
@@ -44,7 +46,7 @@ class TrackTest extends PHPUnit_Framework_TestCase {
   public function testPlanTalks() {
     $this->obj->talks = $this->talks;
 
-    $this->obj->plan_talks();
+    $this->obj->planTalks();
     $this->assertEquals([
       '09:00AM',
       '10:00AM',

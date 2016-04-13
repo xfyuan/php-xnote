@@ -1,18 +1,20 @@
 <?php
+namespace App\Tests;
+use App\Talk;
 
-class TalkTest extends PHPUnit_Framework_TestCase {
+class TalkTest extends \PHPUnit_Framework_TestCase {
   protected $obj = null;
 
   protected function setUp() {
-    $this->assign_normal_talk();
+    $this->assignNormalTalk();
   }
 
-  private function assign_normal_talk() {
-    $this->obj = new App\Talk('Common Ruby Errors 45min');
+  private function assignNormalTalk() {
+    $this->obj = new Talk('Common Ruby Errors 45min');
   }
 
-  private function assign_lightning_talk() {
-    $this->obj = new App\Talk('Common Ruby Errors lightning');
+  private function assignLightningTalk() {
+    $this->obj = new Talk('Common Ruby Errors lightning');
   }
 
   public function testHaveAttributes() {
@@ -33,7 +35,7 @@ class TalkTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testInitialTalkLighting() {
-    $this->assign_lightning_talk();
+    $this->assignLightningTalk();
 
     $this->assertEquals('Common Ruby Errors', $this->obj->title);
     $this->assertEquals(5, $this->obj->length);
@@ -52,7 +54,7 @@ class TalkTest extends PHPUnit_Framework_TestCase {
   public function testOutput() {
     $this->assertEquals('Common Ruby Errors 45min', $this->obj->output());
 
-    $this->assign_lightning_talk();
+    $this->assignLightningTalk();
     $this->assertEquals('Common Ruby Errors lightning', $this->obj->output());
   }
 

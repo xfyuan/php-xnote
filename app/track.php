@@ -9,7 +9,6 @@ class Track {
 
   public $talks         = [];
   public $planned_talks = [];
-  public $halfday       = null;
   public $starttime;
   public $endtime;
   public $lunchtime;
@@ -19,13 +18,13 @@ class Track {
     $this->starttime    = self::START_TIME;
     $this->endtime      = self::END_TIME;
     $this->lunchtime    = self::LUNCH_TIME;
-    $this->total_length = $this->total_diff_length(
-      $this->track_datetime($this->starttime),
-      $this->track_datetime($this->endtime)
+    $this->total_length = $this->totalDiffLength(
+      $this->trackDatetime($this->starttime),
+      $this->trackDatetime($this->endtime)
     ) - self::LUNCH_LENGTH;
   }
 
-  public function total_diff_length($track_datetime1, $track_datetime2) {
+  public function totalDiffLength($track_datetime1, $track_datetime2) {
     $interval     = $track_datetime1->diff($track_datetime2);
     $diff_hours   = $interval->format('%h');
     $diff_minutes = $interval->format('%i');
@@ -33,16 +32,16 @@ class Track {
     return $diff_hours * 60 + $diff_minutes;
   }
 
-  public function plan_talks() {
-    $datetime = $this->track_datetime($this->starttime);
-    $datetime_lunch = $this->track_datetime(self::LUNCH_TIME);
+  public function planTalks() {
+    $datetime = $this->trackDatetime($this->starttime);
+    $datetime_lunch = $this->trackDatetime(self::LUNCH_TIME);
 
     foreach($this->talks as $talk) {
       $marked_time = $datetime->format('h:iA');
       $this->planned_talks[$marked_time] = $talk;
       $datetime->add(date_interval_create_from_date_string("{$talk->length} minutes"));
 
-      if ($this->total_diff_length($datetime, $datetime_lunch) < 5) {
+      if ($this->totalDiffLength($datetime, $datetime_lunch) < 5) {
         $marked_time = $datetime_lunch->format('h:iA');
         $this->planned_talks[$marked_time] = new Talk('Lunch');
         $datetime->add(date_interval_create_from_date_string("1 hour"));
@@ -52,7 +51,7 @@ class Track {
     $this->planned_talks[$datetime->format('h:iA')] = new Talk('Networking Event');
   }
 
-  public function track_datetime($timestr) {
+  public function trackDatetime($timestr) {
     $dts = new \DateTime();
     list($hour, $minutes) = explode(':', $timestr);
     $dts->setTime($hour, $minutes);
