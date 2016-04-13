@@ -1,0 +1,10 @@
+app:
+  # paths to explore
+  path:
+    extensions: php|inc
+    exclude: vendor|tmp
+
+  # report and violations files
+  logging:
+    report:
+      html:   ./report/phpmetrics.html
