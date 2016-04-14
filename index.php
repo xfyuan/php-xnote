@@ -7,8 +7,8 @@ $data = file_get_contents($source);
 
 $conference = new App\Conference($data);
 
-$conference->grouped_talks();
+$conference->groupedTalks();
 
-$conference->schedule_tracks_with_talks();
+$conference->scheduleTracksWithTalks();
 
-$conference->output_scheduled_tracks();
+$conference->outputScheduledTracks();

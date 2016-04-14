@@ -49,13 +49,12 @@ class Conference {
       foreach($this->groupedTalks as $length => $talks) {
         foreach($talks as $talk) {
           if (!$talk->marked) {
-            if ($totalTrackLength >= $length) {
-              $track->talks[] = $talk;
-              $talk->marked = true;
-              $totalTrackLength -= $length;
-            } else {
+            if ($totalTrackLength < $length) {
               break;
             }
+            $track->talks[] = $talk;
+            $talk->marked = true;
+            $totalTrackLength -= $length;
           }
         }
       }
