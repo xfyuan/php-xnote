@@ -15,9 +15,9 @@ class Track {
   public $totalLength;
 
   public function __construct(){
-    $this->starttime    = self::START_TIME;
-    $this->endtime      = self::END_TIME;
-    $this->lunchtime    = self::LUNCH_TIME;
+    $this->starttime   = self::START_TIME;
+    $this->endtime     = self::END_TIME;
+    $this->lunchtime   = self::LUNCH_TIME;
     $this->totalLength = $this->totalDiffLength(
       $this->trackDatetime($this->starttime),
       $this->trackDatetime($this->endtime)
@@ -25,7 +25,7 @@ class Track {
   }
 
   public function totalDiffLength($trackDatetime1, $trackDatetime2) {
-    $interval     = $trackDatetime1->diff($trackDatetime2);
+    $interval    = $trackDatetime1->diff($trackDatetime2);
     $diffHours   = $interval->format('%h');
     $diffMinutes = $interval->format('%i');
 

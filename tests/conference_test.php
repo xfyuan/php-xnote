@@ -61,10 +61,10 @@ EOF;
 
   public function testHaveAttributes() {
     $klass = get_class($this->obj);
-    $this->assertClassHasAttribute('days', $klass);
-    $this->assertClassHasAttribute('talks', $klass);
-    $this->assertClassHasAttribute('groupedTalks', $klass);
-    $this->assertClassHasAttribute('tracks', $klass);
+    $this->assertClassHasAttribute('days',            $klass);
+    $this->assertClassHasAttribute('talks',           $klass);
+    $this->assertClassHasAttribute('groupedTalks',    $klass);
+    $this->assertClassHasAttribute('tracks',          $klass);
     $this->assertClassHasAttribute('scheduledTracks', $klass);
   }
 

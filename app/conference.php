@@ -2,10 +2,10 @@
 namespace App;
 
 class Conference {
-  public $days             = null;
-  public $talks            = [];
+  public $days            = null;
+  public $talks           = [];
   public $groupedTalks    = [];
-  public $tracks           = [];
+  public $tracks          = [];
   public $scheduledTracks = [];
 
   public function __construct($data) {
