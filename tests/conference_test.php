@@ -63,9 +63,9 @@ EOF;
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('days', $klass);
     $this->assertClassHasAttribute('talks', $klass);
-    $this->assertClassHasAttribute('grouped_talks', $klass);
+    $this->assertClassHasAttribute('groupedTalks', $klass);
     $this->assertClassHasAttribute('tracks', $klass);
-    $this->assertClassHasAttribute('scheduled_tracks', $klass);
+    $this->assertClassHasAttribute('scheduledTracks', $klass);
   }
 
   public function testInitial() {
@@ -111,11 +111,11 @@ EOF;
     ];
 
     $this->obj->groupedTalks();
-    $this->assertEquals($grouped_talks, $this->obj->grouped_talks);
+    $this->assertEquals($grouped_talks, $this->obj->groupedTalks);
 
     $this->obj->scheduleTracksWithTalks();
-    $this->assertCount(8, $this->obj->scheduled_tracks[0]->talks);
-    $this->assertCount(11, $this->obj->scheduled_tracks[1]->talks);
+    $this->assertCount(8, $this->obj->scheduledTracks[0]->talks);
+    $this->assertCount(11, $this->obj->scheduledTracks[1]->talks);
   }
 
 }

@@ -26,21 +26,21 @@ class TrackTest extends \PHPUnit_Framework_TestCase {
   public function testHaveAttributes() {
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('talks', $klass);
-    $this->assertClassHasAttribute('planned_talks', $klass);
+    $this->assertClassHasAttribute('plannedTalks', $klass);
     $this->assertClassHasAttribute('starttime', $klass);
     $this->assertClassHasAttribute('endtime', $klass);
-    $this->assertClassHasAttribute('total_length', $klass);
+    $this->assertClassHasAttribute('totalLength', $klass);
   }
 
   public function testTotalLength() {
     $this->obj->starttime = '09:00';
     $this->obj->endtime = '11:30';
 
-    $this->obj->total_length = $this->obj->totalDiffLength(
+    $this->obj->totalLength = $this->obj->totalDiffLength(
       $this->obj->trackDatetime($this->obj->starttime),
       $this->obj->trackDatetime($this->obj->endtime)
     );
-    $this->assertEquals(150, $this->obj->total_length);
+    $this->assertEquals(150, $this->obj->totalLength);
   }
 
   public function testPlanTalks() {
@@ -55,6 +55,6 @@ class TrackTest extends \PHPUnit_Framework_TestCase {
       '12:00PM',
       '01:00PM',
       '02:00PM'
-    ], array_keys($this->obj->planned_talks));
+    ], array_keys($this->obj->plannedTalks));
   }
 }

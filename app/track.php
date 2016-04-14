@@ -8,17 +8,17 @@ class Track {
   const LUNCH_LENGTH = 60;
 
   public $talks         = [];
-  public $planned_talks = [];
+  public $plannedTalks = [];
   public $starttime;
   public $endtime;
   public $lunchtime;
-  public $total_length;
+  public $totalLength;
 
   public function __construct(){
     $this->starttime    = self::START_TIME;
     $this->endtime      = self::END_TIME;
     $this->lunchtime    = self::LUNCH_TIME;
-    $this->total_length = $this->totalDiffLength(
+    $this->totalLength = $this->totalDiffLength(
       $this->trackDatetime($this->starttime),
       $this->trackDatetime($this->endtime)
     ) - self::LUNCH_LENGTH;
@@ -38,17 +38,17 @@ class Track {
 
     foreach($this->talks as $talk) {
       $marked_time = $datetime->format('h:iA');
-      $this->planned_talks[$marked_time] = $talk;
+      $this->plannedTalks[$marked_time] = $talk;
       $datetime->add(date_interval_create_from_date_string("{$talk->length} minutes"));
 
       if ($this->totalDiffLength($datetime, $datetime_lunch) < 5) {
         $marked_time = $datetime_lunch->format('h:iA');
-        $this->planned_talks[$marked_time] = new Talk('Lunch');
+        $this->plannedTalks[$marked_time] = new Talk('Lunch');
         $datetime->add(date_interval_create_from_date_string("1 hour"));
       }
     }
 
-    $this->planned_talks[$datetime->format('h:iA')] = new Talk('Networking Event');
+    $this->plannedTalks[$datetime->format('h:iA')] = new Talk('Networking Event');
   }
 
   public function trackDatetime($timestr) {
