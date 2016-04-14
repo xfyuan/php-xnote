@@ -24,26 +24,26 @@ class Track {
     ) - self::LUNCH_LENGTH;
   }
 
-  public function totalDiffLength($track_datetime1, $track_datetime2) {
-    $interval     = $track_datetime1->diff($track_datetime2);
-    $diff_hours   = $interval->format('%h');
-    $diff_minutes = $interval->format('%i');
+  public function totalDiffLength($trackDatetime1, $trackDatetime2) {
+    $interval     = $trackDatetime1->diff($trackDatetime2);
+    $diffHours   = $interval->format('%h');
+    $diffMinutes = $interval->format('%i');
 
-    return $diff_hours * 60 + $diff_minutes;
+    return $diffHours * 60 + $diffMinutes;
   }
 
   public function planTalks() {
     $datetime = $this->trackDatetime($this->starttime);
-    $datetime_lunch = $this->trackDatetime(self::LUNCH_TIME);
+    $datetimeLunch = $this->trackDatetime(self::LUNCH_TIME);
 
     foreach($this->talks as $talk) {
-      $marked_time = $datetime->format('h:iA');
-      $this->plannedTalks[$marked_time] = $talk;
+      $markedTime = $datetime->format('h:iA');
+      $this->plannedTalks[$markedTime] = $talk;
       $datetime->add(date_interval_create_from_date_string("{$talk->length} minutes"));
 
-      if ($this->totalDiffLength($datetime, $datetime_lunch) < 5) {
-        $marked_time = $datetime_lunch->format('h:iA');
-        $this->plannedTalks[$marked_time] = new Talk('Lunch');
+      if ($this->totalDiffLength($datetime, $datetimeLunch) < 5) {
+        $markedTime = $datetimeLunch->format('h:iA');
+        $this->plannedTalks[$markedTime] = new Talk('Lunch');
         $datetime->add(date_interval_create_from_date_string("1 hour"));
       }
     }

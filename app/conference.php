@@ -44,15 +44,15 @@ class Conference {
 
   public function scheduleTracksWithTalks() {
     foreach($this->tracks as $track) {
-      $total_track_length = $track->totalLength;
+      $totalTrackLength = $track->totalLength;
 
       foreach($this->groupedTalks as $length => $talks) {
         foreach($talks as $talk) {
           if (!$talk->marked) {
-            if ($total_track_length >= $length) {
+            if ($totalTrackLength >= $length) {
               $track->talks[] = $talk;
               $talk->marked = true;
-              $total_track_length -= $length;
+              $totalTrackLength -= $length;
             } else {
               break;
             }
@@ -67,8 +67,8 @@ class Conference {
   public function outputScheduledTracks() {
     foreach($this->scheduledTracks as $i => $track) {
       echo "Track" . ($i+1) . PHP_EOL;
-      foreach($track->plannedTalks as $marked_time => $talk) {
-        echo "{$marked_time} {$talk->output()}" . PHP_EOL;
+      foreach($track->plannedTalks as $markedTime => $talk) {
+        echo "{$markedTime} {$talk->output()}" . PHP_EOL;
       }
       echo PHP_EOL . PHP_EOL;
     }

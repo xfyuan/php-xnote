@@ -79,7 +79,7 @@ EOF;
   }
 
   public function testGroupedTalks() {
-    $grouped_talks = [
+    $groupedTalks = [
       '60' => [
         $this->talks[0],
         $this->talks[6],
@@ -111,7 +111,7 @@ EOF;
     ];
 
     $this->obj->groupedTalks();
-    $this->assertEquals($grouped_talks, $this->obj->groupedTalks);
+    $this->assertEquals($groupedTalks, $this->obj->groupedTalks);
 
     $this->obj->scheduleTracksWithTalks();
     $this->assertCount(8, $this->obj->scheduledTracks[0]->talks);
