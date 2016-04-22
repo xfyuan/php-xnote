@@ -17,6 +17,11 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
     $this->obj = new Talk('Common Ruby Errors lightning');
   }
 
+  /**
+   * Test class properties
+   *
+   * @return void
+   **/
   public function testHaveAttributes() {
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('title',  $klass);
@@ -26,6 +31,11 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
     $this->assertClassHasAttribute('marked', $klass);
   }
 
+  /**
+   * Test class initial
+   *
+   * @return void
+   **/
   public function testInitialTalk() {
     $this->assertEquals('Common Ruby Errors', $this->obj->title);
     $this->assertEquals(45,       $this->obj->length);
@@ -34,6 +44,11 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($this->obj->marked);
   }
 
+  /**
+   * Test class initial when lighting talk
+   *
+   * @return void
+   **/
   public function testInitialTalkLighting() {
     $this->assignLightningTalk();
 
@@ -44,7 +59,12 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($this->obj->marked);
   }
 
-  public function testOutput() {
+  /**
+   * Test class print
+   *
+   * @return void
+   **/
+  public function testToString() {
     $this->assertEquals('Common Ruby Errors 45min', $this->obj);
 
     $this->assignLightningTalk();

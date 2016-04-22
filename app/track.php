@@ -84,7 +84,7 @@ class Track {
    * @return void
    **/
   public function __toString() {
-    $printable_track= array_map(function($time_tag, $talk) {
+    $printable_track = array_map(function($time_tag, $talk) {
       return  "{$time_tag} {$talk}";
     }
     ,array_keys($this->plannedTalks)

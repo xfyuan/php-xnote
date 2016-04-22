@@ -59,6 +59,11 @@ EOF;
     }
   }
 
+  /**
+   * Test class properties
+   *
+   * @return void
+   **/
   public function testHaveAttributes() {
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('days',            $klass);
@@ -68,6 +73,11 @@ EOF;
     $this->assertClassHasAttribute('scheduledTracks', $klass);
   }
 
+  /**
+   * Test class initial
+   *
+   * @return void
+   **/
   public function testInitial() {
     $this->assertCount(19, $this->obj->talks);
     $this->assertInstanceOf('App\Talk', $this->obj->talks[0]);
@@ -78,6 +88,11 @@ EOF;
     $this->assertInstanceOf('App\Track', $this->obj->tracks[0]);
   }
 
+  /**
+   * Test schedule tracks with whole talks
+   *
+   * @return void
+   **/
   public function testScheduleTracksWithTalks() {
     $this->obj->scheduleTracksWithTalks();
     $this->assertEquals(count($this->talks), count($this->obj->sortedTalks));
