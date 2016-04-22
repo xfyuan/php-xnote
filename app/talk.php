@@ -55,11 +55,10 @@ class Talk {
   public function __construct($input) {
     if ($result = $this->parse($input)){
       $this->title  = $result[1];
+      $this->length = self::LUNCH_LENGTH;
+      $this->tag    = self::DEFAULT_TAG;
 
-      if ($result[0] === self::IS_PUBLIC_EVENT) {
-        $this->length = self::LUNCH_LENGTH;
-        $this->tag    = self::DEFAULT_TAG;
-      } else {
+      if ($result[0] !== self::IS_PUBLIC_EVENT) {
         $this->length = count($result) > 3 ? (int)$result[3] : self::LIGHTNING_LENGTH;
         $this->tag    = preg_match("/\d+/", $result[2]) ? self::NORMAL_TAG : self::LIGHTNING_TAG;
       }
