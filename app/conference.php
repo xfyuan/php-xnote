@@ -58,9 +58,9 @@ class Conference {
    **/
   public function readSource($data) {
     if($talks = preg_split("/".PHP_EOL."/", $data)) {
-      foreach($talks as $talk) {
-        $this->talks[] = new Talk($talk);
-      }
+      $this->talks = array_map(function($talk) {
+        return new Talk($talk);
+      }, $talks);
     }
   }
 
@@ -135,11 +135,17 @@ class Conference {
   public function outputScheduledTracks() {
     foreach($this->scheduledTracks as $i => $track) {
       echo "Track" . ($i+1) . PHP_EOL;
-      foreach($track->plannedTalks as $markedTime => $talk) {
-        echo "{$markedTime} {$talk->output()}" . PHP_EOL;
-      }
+      echo implode(PHP_EOL, $this->scheduledTracksForOutput($track));
       echo PHP_EOL . PHP_EOL;
     }
+  }
+
+  private function scheduledTracksForOutput($track) {
+    return array_map(function($time_tag, $talk) {
+      return  "{$time_tag} {$talk->output()}";
+    }
+    ,array_keys($track->plannedTalks)
+    ,$track->plannedTalks);
   }
 
 }
