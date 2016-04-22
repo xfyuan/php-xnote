@@ -73,7 +73,7 @@ class Conference {
   public function outputScheduledTracks() {
     foreach($this->scheduledTracks as $i => $track) {
       echo "Track" . ($i+1) . PHP_EOL;
-      echo implode(PHP_EOL, $this->printableTrack($track));
+      echo $track;
       echo PHP_EOL . PHP_EOL;
     }
   }
@@ -90,20 +90,6 @@ class Conference {
       return $memo;
     }, []);
     krsort($this->sortedTalks, SORT_NUMERIC);
-  }
-
-  /**
-   * Printable track with it's full talks
-   *
-   * @param object $track
-   * @return array
-   **/
-  private function printableTrack($track) {
-    return array_map(function($time_tag, $talk) {
-      return  "{$time_tag} {$talk}";
-    }
-    ,array_keys($track->plannedTalks)
-    ,$track->plannedTalks);
   }
 
   /**

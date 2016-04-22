@@ -78,6 +78,28 @@ class Track {
     $this->fillNetworkEvent($datetime);
   }
 
+  /**
+   * __toString: Printable track with it's full talks
+   *
+   * @return void
+   **/
+  public function __toString() {
+    $printable_track= array_map(function($time_tag, $talk) {
+      return  "{$time_tag} {$talk}";
+    }
+    ,array_keys($this->plannedTalks)
+    ,$this->plannedTalks);
+
+    return implode(PHP_EOL, $printable_track);
+  }
+
+  /**
+   * All talks including lunch between 2 datetime
+   *
+   * @param datetime $dts
+   * @param datetime $dts_lunch
+   * @return array
+   **/
   private function plannedTalksWithLunch($dts, $dts_lunch) {
     return array_reduce($this->talks, function($memo, $talk) use (&$dts, $dts_lunch) {
       $memo[$this->timeTag($dts)] = $talk;
