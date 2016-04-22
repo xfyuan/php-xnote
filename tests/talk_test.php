@@ -45,10 +45,10 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testOutput() {
-    $this->assertEquals('Common Ruby Errors 45min', $this->obj->output());
+    $this->assertEquals('Common Ruby Errors 45min', $this->obj);
 
     $this->assignLightningTalk();
-    $this->assertEquals('Common Ruby Errors lightning', $this->obj->output());
+    $this->assertEquals('Common Ruby Errors lightning', $this->obj);
   }
 
 }

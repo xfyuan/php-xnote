@@ -63,7 +63,7 @@ EOF;
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('days',            $klass);
     $this->assertClassHasAttribute('talks',           $klass);
-    $this->assertClassHasAttribute('groupedTalks',    $klass);
+    $this->assertClassHasAttribute('sortedTalks',    $klass);
     $this->assertClassHasAttribute('tracks',          $klass);
     $this->assertClassHasAttribute('scheduledTracks', $klass);
   }
@@ -78,9 +78,9 @@ EOF;
     $this->assertInstanceOf('App\Track', $this->obj->tracks[0]);
   }
 
-  public function testGroupedTalks() {
-    $this->assertEquals(count($this->talks), count($this->obj->groupedTalks));
+  public function testScheduleTracksWithTalks() {
     $this->obj->scheduleTracksWithTalks();
+    $this->assertEquals(count($this->talks), count($this->obj->sortedTalks));
     $this->assertCount(8, $this->obj->scheduledTracks[0]->talks);
     $this->assertCount(11, $this->obj->scheduledTracks[1]->talks);
   }

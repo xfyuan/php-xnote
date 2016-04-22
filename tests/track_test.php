@@ -18,11 +18,16 @@ class TrackTest extends \PHPUnit_Framework_TestCase {
 
     $this->obj = new Track();
 
-    foreach($talks as $talk) {
-      $this->talks[] = new Talk($talk);
-    }
+    $this->talks = array_map(function($talk) {
+      return new Talk($talk);
+    }, $talks);
   }
 
+  /**
+   * Test class properties
+   *
+   * @return void
+   **/
   public function testHaveAttributes() {
     $klass = get_class($this->obj);
     $this->assertClassHasAttribute('talks', $klass);
@@ -32,6 +37,11 @@ class TrackTest extends \PHPUnit_Framework_TestCase {
     $this->assertClassHasAttribute('totalLength', $klass);
   }
 
+  /**
+   * Test planned talks
+   *
+   * @return void
+   **/
   public function testPlanTalks() {
     $this->obj->talks = $this->talks;
 

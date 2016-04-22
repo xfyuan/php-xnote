@@ -7,13 +7,53 @@ class Track {
   const END_TIME     = '17:00';
   const LUNCH_LENGTH = 60;
 
+  /**
+   * Talks in track
+   *
+   * @var array
+   **/
   public $talks         = [];
+
+  /**
+   * Talks in track is planned
+   *
+   * @var array
+   **/
   public $plannedTalks = [];
+
+  /**
+   * Track start time
+   *
+   * @var string
+   **/
   public $starttime;
+
+  /**
+   * Track end time
+   *
+   * @var string
+   **/
   public $endtime;
+
+  /**
+   * Track lunch time
+   *
+   * @var string
+   **/
   public $lunchtime;
+
+  /**
+   * Track total time length which don't include lunch time
+   *
+   * @var number
+   **/
   public $totalLength;
 
+  /**
+   * Create a new Track.
+   *
+   * @return void
+   **/
   public function __construct(){
     $this->starttime   = self::START_TIME;
     $this->endtime     = self::END_TIME;
@@ -24,6 +64,11 @@ class Track {
     ) - self::LUNCH_LENGTH;
   }
 
+  /**
+   * Plan current track's talks
+   *
+   * @return void
+   **/
   public function planTalks() {
     $datetime = $this->trackDatetime($this->starttime);
     $datetimeLunch = $this->trackDatetime(self::LUNCH_TIME);
@@ -47,22 +92,47 @@ class Track {
     }, []);
   }
 
-  private function fillNetworkEvent($datetime) {
-    $this->plannedTalks[$this->timeTag($datetime)] = new Talk('Networking Event');
+  /**
+   * add network event in track
+   *
+   * @param datetime $dts
+   * @return void
+   **/
+  private function fillNetworkEvent($dts) {
+    $this->plannedTalks[$this->timeTag($dts)] = new Talk('Networking Event');
   }
 
+  /**
+   * Time tag for a talk
+   *
+   * @param datetime $dts
+   * @return string
+   **/
   private function timeTag($dts) {
     return $dts->format('h:iA');
   }
 
-  private function totalDiffLength($trackDatetime1, $trackDatetime2) {
-    $interval    = $trackDatetime1->diff($trackDatetime2);
+  /**
+   * Time difference between 2 datetimes by minutes
+   *
+   * @param datetime $dts1
+   * @param datetime $dts2
+   * @return number
+   **/
+  private function totalDiffLength($dts1, $dts2) {
+    $interval    = $dts1->diff($dts2);
     $diffHours   = $interval->format('%h');
     $diffMinutes = $interval->format('%i');
 
     return $diffHours * 60 + $diffMinutes;
   }
 
+  /**
+   * convert a time sting into a datetime
+   *
+   * @param string $timestr
+   * @return datetime
+   **/
   private function trackDatetime($timestr) {
     $dts = new \DateTime();
     list($hour, $minutes) = explode(':', $timestr);

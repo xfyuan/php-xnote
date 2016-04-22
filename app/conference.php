@@ -18,11 +18,11 @@ class Conference {
   public $talks           = [];
 
   /**
-   * whole talks whick are grouped by it's length
+   * whole talks sorted by time length
    *
    * @var array
    **/
-  public $groupedTalks    = [];
+  public $sortedTalks    = [];
 
   /**
    * whole tracks
@@ -48,17 +48,17 @@ class Conference {
     $this->readSource($data);
     $this->refreshDays();
     $this->refreshTracks();
-    $this->groupedTalks();
   }
 
   /**
-   * scheduleTracksWithTalks
+   * Schedule tracks with talks
    *
    * @return void
    **/
   public function scheduleTracksWithTalks() {
+    $this->sortedTalks();
     $this->scheduledTracks = array_reduce($this->tracks, function($memo, $track) {
-      $track->talks = $this->fillTalksIntoCurrentTrack($track);
+      $track->talks = $this->talksForCurrentTrack($track);
       $track->planTalks();
       $memo[] = $track;
       return $memo;
@@ -66,43 +66,55 @@ class Conference {
   }
 
   /**
-   * outputScheduledTracks
+   * Print scheduled tracks of whole conference
    *
    * @return void
    **/
   public function outputScheduledTracks() {
     foreach($this->scheduledTracks as $i => $track) {
       echo "Track" . ($i+1) . PHP_EOL;
-      echo implode(PHP_EOL, $this->scheduledTracksForOutput($track));
+      echo implode(PHP_EOL, $this->printableTrack($track));
       echo PHP_EOL . PHP_EOL;
     }
   }
 
   /**
-   * groupedTalks
+   * Sort whole conference's talks by time length
    *
    * @return void
    **/
-  private function groupedTalks() {
-    $this->groupedTalks = array_reduce($this->talks, function($memo, $talk) {
+  private function sortedTalks() {
+    $this->sortedTalks = array_reduce($this->talks, function($memo, $talk) {
       $key = $talk->length . preg_replace('/ /', '-', strtolower($talk->title));
       $memo[$key] = $talk;
       return $memo;
     }, []);
-    krsort($this->groupedTalks, SORT_NUMERIC);
+    krsort($this->sortedTalks, SORT_NUMERIC);
   }
 
-  private function scheduledTracksForOutput($track) {
+  /**
+   * Printable track with it's full talks
+   *
+   * @param object $track
+   * @return array
+   **/
+  private function printableTrack($track) {
     return array_map(function($time_tag, $talk) {
-      return  "{$time_tag} {$talk->output()}";
+      return  "{$time_tag} {$talk}";
     }
     ,array_keys($track->plannedTalks)
     ,$track->plannedTalks);
   }
 
-  private function fillTalksIntoCurrentTrack($track) {
+  /**
+   * All talks which can be filled into current track until it's full filled
+   *
+   * @param object $track
+   * @return array
+   **/
+  private function talksForCurrentTrack($track) {
     $totalTrackLength = $track->totalLength;
-    return array_reduce($this->groupedTalks, function($memo, $talk) use (&$totalTrackLength) {
+    return array_reduce($this->sortedTalks, function($memo, $talk) use (&$totalTrackLength) {
       if (!$talk->marked && $totalTrackLength >= $talk->length) {
         $memo[] = $talk;
         $talk->marked = true;
@@ -113,7 +125,7 @@ class Conference {
   }
 
   /**
-   * readSource
+   * Parse plan string of conference schedule
    *
    * @param string $data
    * @return void
@@ -127,19 +139,19 @@ class Conference {
   }
 
   /**
-   * refreshDays
+   * Calculate whole days needed for the conference
    *
    * @return void
    **/
   private function refreshDays() {
     $minutes = array_reduce($this->talks, function($memo, $talk){
       return $memo += $talk->length;
-    });
+    }, 0);
     $this->days = (int) ceil($minutes / (new Track())->totalLength);
   }
 
   /**
-   * refreshTracks
+   * Generate track object for each day
    *
    * @return void
    **/
