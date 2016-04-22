@@ -28,12 +28,6 @@ class Talk {
     }
   }
 
-  public function parse($input) {
-    $regex = "/(.*)\s((\d+)\s*". self::TIME_UNIT ."|". self::LIGHTNING_TAG .")$/ui";
-    preg_match($regex, $input, $matches);
-    return $matches;
-  }
-
   public function output() {
     switch ($this->tag) {
       case self::NORMAL_TAG:
@@ -47,6 +41,12 @@ class Talk {
         break;
     }
     return $string;
+  }
+
+  private function parse($input) {
+    $regex = "/(.*)\s((\d+)\s*". self::TIME_UNIT ."|". self::LIGHTNING_TAG .")$/ui";
+    preg_match($regex, $input, $matches);
+    return $matches;
   }
 
 }

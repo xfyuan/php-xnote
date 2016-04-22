@@ -32,17 +32,6 @@ class TrackTest extends \PHPUnit_Framework_TestCase {
     $this->assertClassHasAttribute('totalLength', $klass);
   }
 
-  public function testTotalLength() {
-    $this->obj->starttime = '09:00';
-    $this->obj->endtime = '11:30';
-
-    $this->obj->totalLength = $this->obj->totalDiffLength(
-      $this->obj->trackDatetime($this->obj->starttime),
-      $this->obj->trackDatetime($this->obj->endtime)
-    );
-    $this->assertEquals(150, $this->obj->totalLength);
-  }
-
   public function testPlanTalks() {
     $this->obj->talks = $this->talks;
 

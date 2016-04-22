@@ -24,31 +24,27 @@ class Track {
     ) - self::LUNCH_LENGTH;
   }
 
-  public function totalDiffLength($trackDatetime1, $trackDatetime2) {
-    $interval    = $trackDatetime1->diff($trackDatetime2);
-    $diffHours   = $interval->format('%h');
-    $diffMinutes = $interval->format('%i');
-
-    return $diffHours * 60 + $diffMinutes;
-  }
-
   public function planTalks() {
     $datetime = $this->trackDatetime($this->starttime);
     $datetimeLunch = $this->trackDatetime(self::LUNCH_TIME);
 
-    $this->plannedTalks = array_reduce($this->talks, function($memo, $talk) use (&$datetime, $datetimeLunch) {
-      $memo[$this->timeTag($datetime)] = $talk;
-      $datetime->add(date_interval_create_from_date_string("{$talk->length} minutes"));
+    $this->plannedTalks = $this->plannedTalksWithLunch($datetime, $datetimeLunch);
 
-      if ($this->totalDiffLength($datetime, $datetimeLunch) < 5) {
-        $memo[$this->timeTag($datetimeLunch)] = new Talk('Lunch');
-        $datetime->add(date_interval_create_from_date_string("1 hour"));
+    $this->fillNetworkEvent($datetime);
+  }
+
+  private function plannedTalksWithLunch($dts, $dts_lunch) {
+    return array_reduce($this->talks, function($memo, $talk) use (&$dts, $dts_lunch) {
+      $memo[$this->timeTag($dts)] = $talk;
+      $dts->add(date_interval_create_from_date_string("{$talk->length} minutes"));
+
+      if ($this->totalDiffLength($dts, $dts_lunch) < 5) {
+        $memo[$this->timeTag($dts_lunch)] = new Talk('Lunch');
+        $dts->add(date_interval_create_from_date_string("1 hour"));
       }
 
       return $memo;
     }, []);
-
-    $this->fillNetworkEvent($datetime);
   }
 
   private function fillNetworkEvent($datetime) {
@@ -59,7 +55,15 @@ class Track {
     return $dts->format('h:iA');
   }
 
-  public function trackDatetime($timestr) {
+  private function totalDiffLength($trackDatetime1, $trackDatetime2) {
+    $interval    = $trackDatetime1->diff($trackDatetime2);
+    $diffHours   = $interval->format('%h');
+    $diffMinutes = $interval->format('%i');
+
+    return $diffHours * 60 + $diffMinutes;
+  }
+
+  private function trackDatetime($timestr) {
     $dts = new \DateTime();
     list($hour, $minutes) = explode(':', $timestr);
     $dts->setTime($hour, $minutes);

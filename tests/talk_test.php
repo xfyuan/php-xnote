@@ -44,13 +44,6 @@ class TalkTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($this->obj->marked);
   }
 
-  public function testParseInput() {
-    $result = $this->obj->parse('Common Ruby Errors 45min');
-    $this->assertContains(45, $result);
-    $result = $this->obj->parse('Common Ruby Errors lightning');
-    $this->assertContains('lightning', $result);
-  }
-
   public function testOutput() {
     $this->assertEquals('Common Ruby Errors 45min', $this->obj->output());
 
