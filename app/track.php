@@ -36,19 +36,27 @@ class Track {
     $datetime = $this->trackDatetime($this->starttime);
     $datetimeLunch = $this->trackDatetime(self::LUNCH_TIME);
 
-    foreach($this->talks as $talk) {
-      $markedTime = $datetime->format('h:iA');
-      $this->plannedTalks[$markedTime] = $talk;
+    $this->plannedTalks = array_reduce($this->talks, function($memo, $talk) use (&$datetime, $datetimeLunch) {
+      $memo[$this->timeTag($datetime)] = $talk;
       $datetime->add(date_interval_create_from_date_string("{$talk->length} minutes"));
 
       if ($this->totalDiffLength($datetime, $datetimeLunch) < 5) {
-        $markedTime = $datetimeLunch->format('h:iA');
-        $this->plannedTalks[$markedTime] = new Talk('Lunch');
+        $memo[$this->timeTag($datetimeLunch)] = new Talk('Lunch');
         $datetime->add(date_interval_create_from_date_string("1 hour"));
       }
-    }
 
-    $this->plannedTalks[$datetime->format('h:iA')] = new Talk('Networking Event');
+      return $memo;
+    }, []);
+
+    $this->fillNetworkEvent($datetime);
+  }
+
+  private function fillNetworkEvent($datetime) {
+    $this->plannedTalks[$this->timeTag($datetime)] = new Talk('Networking Event');
+  }
+
+  private function timeTag($dts) {
+    return $dts->format('h:iA');
   }
 
   public function trackDatetime($timestr) {
